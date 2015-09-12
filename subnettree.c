@@ -146,14 +146,14 @@ node_t *lookup_best_helper (node_t *root, uint32_t ip, node_t* prefix) {
         if (root->l->data != NULL) {
             prefix = root->l;
         }
-        return lookup_best_helper(root->l, ip);
+        return lookup_best_helper(root->l, ip, prefix);
     } else {
         return root;
     }
 }
 
 node_t *prefix_lookup_best (node_t *root, uint32_t ip) {
-    node_t *prefix = )(root->data != NULL) ? root : NULL);
+    node_t *prefix = ((root->data != NULL) ? root : NULL);
     return lookup_best_helper(root, ip, prefix); 
 }
 
