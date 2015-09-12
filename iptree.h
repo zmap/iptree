@@ -1,5 +1,5 @@
-#ifndef _SUBNETTREE_H
-#define _SUBNETTREE_H
+#ifndef _IPTREE_H
+#define _IPTREE_H
 
 #include <stdint.h>
 
@@ -10,12 +10,12 @@ typedef struct _node_t {
    char *data;			/* pointer to data */
 } node_t;
 
-node_t *create_subnettree ();
+node_t *create_iptree ();
 uint32_t findCommonMask (uint32_t ip1, uint32_t ip2);
 node_t *prefix_lookup_exact (node_t *root, uint32_t ip, uint32_t mask);
 node_t *prefix_lookup_best (node_t *root, uint32_t ip);
 node_t *prefix_insert (node_t *root, uint32_t ip, uint32_t mask, char *data);
 void prefix_remove (node_t *root, uint32_t ip, uint32_t mask);
-void destroy_subnettree (node_t *root);
+void destroy_iptree (node_t *root);
 
-#endif /* _SUBNETTREE_H */
+#endif /* _IPTREE_H */

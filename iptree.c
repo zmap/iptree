@@ -1,8 +1,8 @@
-#include "subnettree.h"
+#include "iptree.h"
 
 #include <stdlib.h>
 
-node_t *create_subnettree () {
+node_t *create_iptree () {
     node_t *root = calloc(1, sizeof(node_t));
     root->prefix = 0;
     root->mask = 0;
@@ -161,11 +161,11 @@ void prefix_remove (node_t *root, uint32_t ip, uint32_t mask) {
     prefix_lookup_exact(root, ip, mask)->data = NULL;
 }
 
-void destroy_subnettree (node_t *root) {
+void destroy_iptree (node_t *root) {
     if (root == NULL) {
         return;
     }
-    destroy_subnettree(root->r);
-    destroy_subnettree(root->l);
+    destroy_iptree(root->r);
+    destroy_iptree(root->l);
     free(root);
 }

@@ -3,7 +3,7 @@ CXX := g++
 CFLAGS := -std=c99 -Wall -Wextra
 CXXFLAGS := -std=c++11 -Wall -Wextra
 LDFLAGS := ""
-OBJS = subnettree.o
+OBJS = iptree.o
 
 all: gtest test_gtest shared_lib static_lib test_standalone
 
