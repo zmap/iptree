@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+extern const uint32_t masks[33];
+
 typedef struct _node_t {
    uint32_t prefix;		/* what ip prefix */
    uint32_t mask;    		/* the mask for the subnet */

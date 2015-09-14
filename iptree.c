@@ -1,6 +1,15 @@
 #include "iptree.h"
 
 #include <stdlib.h>
+#include <stdio.h>
+
+const uint32_t masks[33] = {0x00000000, 0x80000000, 0xC0000000, 0xE0000000, 0xF0000000, 
+                            0xF8000000, 0xFC000000, 0xFE000000, 0xFF000000, 0xFF800000,
+                            0xFFC00000, 0xFFE00000, 0xFFF00000, 0xFFF80000, 0xFFFC0000,
+                            0xFFFE0000, 0xFFFF0000, 0xFFFF8000, 0xFFFFC000, 0xFFFFE000,
+                            0xFFFFF000, 0xFFFFF800, 0xFFFFFC00, 0xFFFFFE00, 0xFFFFFF00,
+                            0xFFFFFF80, 0xFFFFFFC0, 0xFFFFFFE0, 0xFFFFFFF0, 0xFFFFFFF8,
+                            0xFFFFFFFC, 0xFFFFFFFE, 0xFFFFFFFF};
 
 node_t *create_iptree () {
     node_t *root = calloc(1, sizeof(node_t));
@@ -24,8 +33,7 @@ node_t *create_prefix (uint32_t ip, uint32_t mask, char* data) {
 
 uint32_t findCommonMask (uint32_t ip1, uint32_t ip2){
     uint32_t ipXOR = ip1 ^ ip2;
-    uint32_t suffix = 32 - __builtin_clz(ipXOR);
-    uint32_t mask = (0xFFFFFFFF >> suffix) << suffix;
+    uint32_t mask = masks[__builtin_clz(ipXOR)];
     return mask;
 }
 
@@ -51,7 +59,7 @@ node_t *insert_helper (node_t *root, uint32_t ip, uint32_t mask, char *data) {
         node->r = root->r;
         root->r = node;
         return root->r;
-    } else if ((commonMask = findCommonMask(root->r->prefix, ip)) != root->prefix) {
+    } else if (((commonMask = findCommonMask(root->r->prefix, ip)) & ip) != root->prefix || commonMask > root->mask) {
         node_t *node = create_prefix(ip, commonMask, NULL);
         node->r = root->r;
         node->l = create_prefix(ip, mask, data);
@@ -78,7 +86,7 @@ node_t *insert_helper (node_t *root, uint32_t ip, uint32_t mask, char *data) {
         node->r = root->l;
         root->l = node;
         return root->l;
-    } else if ((commonMask = findCommonMask(root->l->prefix, ip)) != root->prefix) {
+    } else if (((commonMask = findCommonMask(root->l->prefix, ip)) & ip) != root->prefix && commonMask > root->mask) {
         node_t *node = create_prefix(ip, commonMask, NULL);
         node->r = root->l;
         node->l = create_prefix(ip, mask, data);
@@ -141,14 +149,14 @@ node_t *lookup_best_helper (node_t *root, uint32_t ip, node_t* prefix) {
         return lookup_best_helper(root->r, ip, prefix);
     }
     if (root->l == NULL) {
-        return root;
+        return prefix;
     } else if (root->l->prefix == (ip & root->l->mask)) {
         if (root->l->data != NULL) {
             prefix = root->l;
         }
         return lookup_best_helper(root->l, ip, prefix);
     } else {
-        return root;
+        return prefix;
     }
 }
 
