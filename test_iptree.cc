@@ -156,17 +156,17 @@ TEST(InsertTest, InsertCommonPrefixFullChildren) {
 
 TEST(LookupTest, BasicLookup) {
     node_t * root = create_iptree();
-    node_t * top = prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
+    prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "root");
-    node_t * first = prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
+    prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "first child");
-    node_t * second = prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
+    prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "second child");
-    node_t * third = prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
+    prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "third child");
-    node_t * fourth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "fourth child");
-    node_t * fifth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "fifth child");
     destroy_iptree(root);
 
@@ -174,19 +174,19 @@ TEST(LookupTest, BasicLookup) {
 
 TEST(LookupTest, LookupWithIntermediary) {
     node_t * root = create_iptree();
-    node_t * top = prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
+    prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "root");
-    node_t * first = prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
+    prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "first child");
-    node_t * second = prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
+    prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "second child");
-    node_t * third = prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
+    prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "third child");
-    node_t * wrong = prefix_insert(root, 0xF60FFFFF, 0xFF000000, "wrong child");
+    prefix_insert(root, 0xF60FFFFF, 0xFF000000, "wrong child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "third child");
-    node_t * fourth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "fourth child");
-    node_t * fifth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "fifth child");
     destroy_iptree(root);
 
@@ -194,12 +194,12 @@ TEST(LookupTest, LookupWithIntermediary) {
 
 TEST(LookupTest, LookupRoot) {
     node_t * root = create_iptree();
-    node_t * top = prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
-    node_t * first = prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
-    node_t * second = prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
-    node_t * third = prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
-    node_t * fourth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
-    node_t * fifth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
+    prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
+    prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
+    prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
+    prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
     EXPECT_STREQ(prefix_lookup_best(root,0x07FFFFFF)->data, "root");
     destroy_iptree(root);
 
@@ -207,12 +207,12 @@ TEST(LookupTest, LookupRoot) {
 
 TEST(LookupTest, LookupAffectedByInsert) {
     node_t * root = create_iptree();
-    node_t * top = prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
-    node_t * first = prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
-    node_t * second = prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
-    node_t * third = prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
+    prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
+    prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
+    prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
+    prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "third child");
-    third = prefix_insert(root, 0xF70FFFFF, 0xFF000000, "new third child");
+    prefix_insert(root, 0xF70FFFFF, 0xFF000000, "new third child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "new third child");
     destroy_iptree(root);
 
@@ -221,7 +221,7 @@ TEST(LookupTest, LookupAffectedByInsert) {
 TEST(LookupTest, LookupWithNullRoot) {
     node_t * root = create_iptree();
     EXPECT_EQ(prefix_lookup_best(root,0xF7FFFFFF), nullptr);
-    node_t * first = prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
+    prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "first child");
     destroy_iptree(root);
 
@@ -229,15 +229,33 @@ TEST(LookupTest, LookupWithNullRoot) {
 
 TEST(RemoveTest, RemoveTest) {
     node_t * root = create_iptree();
-    node_t * top = prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
-    node_t * first = prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
-    node_t * second = prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
-    node_t * third = prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
-    node_t * fourth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
-    node_t * fifth = prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
+    prefix_insert(root, 0x8FFFFFFF, 0x00000000, "root");
+    prefix_insert(root, 0x8FFFFFFF, 0x80000000, "first child");
+    prefix_insert(root, 0xC7FFFFFF, 0xC0000000, "second child");
+    prefix_insert(root, 0xF70FFFFF, 0xFF000000, "third child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFF000, "fourth child");
+    prefix_insert(root, 0xF7FFFFFF, 0xFFFFFFFF, "fifth child");
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "fifth child");
     prefix_remove(root, 0xF7FFFFFF, 0xFFFFFFFF);
     EXPECT_STREQ(prefix_lookup_best(root,0xF7FFFFFF)->data, "fourth child");
+    destroy_iptree(root);
+
+}
+
+TEST(WrapperTest, WrapperTest) {
+    node_t * root = create_iptree();
+    insert(root, "143.255.255.255/0", "root");
+    EXPECT_STREQ(lookup_best(root,"247.255.255.255"), "root");
+    insert(root, "143.255.255.255/1", "first child");
+    EXPECT_STREQ(lookup_best(root, "247.255.255.255"), "first child");
+    insert(root, "199.255.255.255/2", "second child");
+    EXPECT_STREQ(lookup_best(root, "247.255.255.255"), "second child");
+    insert(root, "247.15.255.255/8", "third child");
+    EXPECT_STREQ(lookup_best(root, "247.255.255.255"), "third child");
+    insert(root, "247.255.255.255/20", "fourth child");
+    EXPECT_STREQ(lookup_best(root, "247.255.255.255"), "fourth child");
+    insert(root, "247.255.255.255/32", "fifth child");
+    EXPECT_STREQ(lookup_best(root, "247.255.255.255"), "fifth child");
     destroy_iptree(root);
 
 }

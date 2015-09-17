@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 const uint32_t masks[33] = {0x00000000, 0x80000000, 0xC0000000, 0xE0000000, 0xF0000000, 
                             0xF8000000, 0xFC000000, 0xFE000000, 0xFF000000, 0xFF800000,
@@ -35,6 +36,19 @@ uint32_t findCommonMask (uint32_t ip1, uint32_t ip2){
     uint32_t ipXOR = ip1 ^ ip2;
     uint32_t mask = masks[__builtin_clz(ipXOR)];
     return mask;
+}
+
+void parseCIDR(const char* cidr, uint32_t * ipAddr, uint32_t * mask) {
+    int ipbytes[4];
+    char *slash = strchr(cidr, '/');
+    if (slash) {
+        sscanf(cidr, "%d.%d.%d.%d/%d", &ipbytes[3], &ipbytes[2], &ipbytes[1], &ipbytes[0], mask);
+    } else {
+        sscanf(cidr, "%d.%d.%d.%d", &ipbytes[3], &ipbytes[2], &ipbytes[1], &ipbytes[0]);
+        *mask = 0;
+    }
+    *mask = masks[*mask];
+    *ipAddr = ipbytes[0] | ipbytes[1] << 8 | ipbytes[2] << 16 | ipbytes[3] << 24;
 }
 
 node_t *insert_helper (node_t *root, uint32_t ip, uint32_t mask, char *data) {
@@ -105,6 +119,13 @@ node_t *prefix_insert (node_t *root, uint32_t ip, uint32_t mask, char *data) {
     return insert_helper(root, ip, mask, data);
 }
 
+void insert (node_t *root, char * cidr, char *data) {
+    uint32_t ipAddr;
+    uint32_t mask;
+    parseCIDR(cidr, &ipAddr, &mask);
+    prefix_insert(root, ipAddr, mask, data);
+}
+
 node_t *lookup_helper (node_t *root, uint32_t ip, uint32_t mask) {
     if (root->r == NULL) {
 
@@ -165,8 +186,22 @@ node_t *prefix_lookup_best (node_t *root, uint32_t ip) {
     return lookup_best_helper(root, ip, prefix); 
 }
 
+char * lookup_best (node_t *root, char * ip) {
+    uint32_t ipAddr;
+    uint32_t mask;
+    parseCIDR(ip, &ipAddr, &mask);
+    return prefix_lookup_best(root, ipAddr)->data;
+}
+
 void prefix_remove (node_t *root, uint32_t ip, uint32_t mask) {
     prefix_lookup_exact(root, ip, mask)->data = NULL;
+}
+
+void remove_cidr (node_t *root, char * cidr) {
+    uint32_t ipAddr;
+    uint32_t mask;
+    parseCIDR(cidr, &ipAddr, &mask);
+    prefix_remove(root, ipAddr, mask);
 }
 
 void destroy_iptree (node_t *root) {
