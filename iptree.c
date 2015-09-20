@@ -119,7 +119,7 @@ node_t *prefix_insert (node_t *root, uint32_t ip, uint32_t mask, char *data) {
     return insert_helper(root, ip, mask, data);
 }
 
-void insert (node_t *root, char * cidr, char *data) {
+void insert (node_t *root, const char * cidr, char *data) {
     uint32_t ipAddr;
     uint32_t mask;
     parseCIDR(cidr, &ipAddr, &mask);
@@ -186,7 +186,7 @@ node_t *prefix_lookup_best (node_t *root, uint32_t ip) {
     return lookup_best_helper(root, ip, prefix); 
 }
 
-char * lookup_best (node_t *root, char * ip) {
+char * lookup_best (node_t *root, const char * ip) {
     uint32_t ipAddr;
     uint32_t mask;
     parseCIDR(ip, &ipAddr, &mask);
@@ -197,7 +197,7 @@ void prefix_remove (node_t *root, uint32_t ip, uint32_t mask) {
     prefix_lookup_exact(root, ip, mask)->data = NULL;
 }
 
-void remove_cidr (node_t *root, char * cidr) {
+void remove_cidr (node_t *root, const char * cidr) {
     uint32_t ipAddr;
     uint32_t mask;
     parseCIDR(cidr, &ipAddr, &mask);

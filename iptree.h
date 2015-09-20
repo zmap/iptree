@@ -21,11 +21,11 @@ uint32_t findCommonMask (uint32_t ip1, uint32_t ip2);
 void parseCIDR(const char* cidr, uint32_t * ipAddr, uint32_t * mask);
 node_t *prefix_lookup_exact (node_t *root, uint32_t ip, uint32_t mask);
 node_t *prefix_lookup_best (node_t *root, uint32_t ip);
-char *lookup_best (node_t *root, char * ip);
+char *lookup_best (node_t *root, const char * ip);
 node_t *prefix_insert (node_t *root, uint32_t ip, uint32_t mask, char *data);
-void insert (node_t *root, char * cidr, char *data);
+void insert (node_t *root, const char * cidr, char *data);
 void prefix_remove (node_t *root, uint32_t ip, uint32_t mask);
-void remove_cidr (node_t *root, char * cidr);
+void remove_cidr (node_t *root, const char * cidr);
 void destroy_iptree (node_t *root);
 #ifdef __cplusplus
 }
