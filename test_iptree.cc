@@ -1,6 +1,4 @@
-extern "C" {
-    #include "iptree.h"
-}
+#include "iptree.h"
 #include <gtest/gtest.h>
 
 TEST(CompilationTest, TestsCompile) {

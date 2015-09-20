@@ -1,6 +1,10 @@
 #ifndef _IPTREE_H
 #define _IPTREE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 extern const uint32_t masks[33];
@@ -23,5 +27,8 @@ void insert (node_t *root, char * cidr, char *data);
 void prefix_remove (node_t *root, uint32_t ip, uint32_t mask);
 void remove_cidr (node_t *root, char * cidr);
 void destroy_iptree (node_t *root);
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _IPTREE_H */
