@@ -190,7 +190,8 @@ char * lookup_best (node_t *root, const char * ip) {
     uint32_t ipAddr;
     uint32_t mask;
     parseCIDR(ip, &ipAddr, &mask);
-    return prefix_lookup_best(root, ipAddr)->data;
+    node_t * ret = prefix_lookup_best(root, ipAddr);
+    return ((ret == NULL) ? ret : ret->data);
 }
 
 void prefix_remove (node_t *root, uint32_t ip, uint32_t mask) {
