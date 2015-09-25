@@ -22,11 +22,14 @@ shared_lib: $(OBJS)
 static_lib: $(OBJS)
 	ar -rv libiptree.a $(OBJS)
 
-test_standalone: $(OBJS)
-	gcc $(CFLAGS) test.c $(OBJS) -o $@
+test_standalone: $(objs)
+	gcc $(CFLAGS) -g test.c $(OBJS) -o $@
+
+test_big: $(objs)
+	g++ $(CXXFLAGS) -I jsoncpp -I jsoncpp/include -g bigTest.cc $(OBJS) -L jsoncpp/build/debug/src/lib_json -l jsoncpp -o $@
 
 .PHONY: clean
 
 clean:
-	rm -f *.o *.a *.so test_gtest test_standalone
+	rm -f *.o *.a *.so test_gtest test_standalone test_big
 
