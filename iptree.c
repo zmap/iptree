@@ -100,7 +100,7 @@ node_t *insert_helper (node_t *root, uint32_t ip, uint32_t mask, char *data) {
         node->r = root->l;
         root->l = node;
         return root->l;
-    } else if (((commonMask = findCommonMask(root->l->prefix, ip)) & ip) != root->prefix && commonMask > root->mask) {
+    } else if (((commonMask = findCommonMask(root->l->prefix, ip)) & ip) != root->prefix || commonMask > root->mask) {
         node_t *node = create_prefix(ip, commonMask, NULL);
         node->r = root->l;
         node->l = create_prefix(ip, mask, data);
