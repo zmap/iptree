@@ -6,7 +6,7 @@
 #include "json/json.h"
 using namespace std;
 
-void buildTree(std::string file, node_t * root) {
+void buildTree(std::string file, iptree_node_t * root) {
     std::string line;
     std::ifstream test_data(file, std::ifstream::in); 
     while (test_data) {
@@ -18,12 +18,12 @@ void buildTree(std::string file, node_t * root) {
             return;
         }
         string *prefix = new string(res["bgp_prefix"].asString());
-        insert(root, prefix->c_str(), 
+        iptree_insert_str(root, prefix->c_str(), 
                      const_cast<char*>(prefix->c_str()));
     }
 }
 
-void testTree(std::string file, node_t * root) {
+void testTree(std::string file, iptree_node_t * root) {
     std::string line;
     std::ifstream in_data(file, std::ifstream::in); 
     while (in_data) {
@@ -31,14 +31,14 @@ void testTree(std::string file, node_t * root) {
         if(line.size() < 7) {
             continue;
         }
-        std::cout << lookup_best(root, line.c_str()) << endl;
+        std::cout << iptree_lookup_best_str(root, line.c_str()) << endl;
     }
 }
 
 int main() {
-    node_t * root = create_iptree();
+    iptree_node_t * root = iptree_create();
     buildTree("test_data.json", root);
     testTree("in.txt", root);
-    destroy_iptree(root);
+    iptree_destroy(root);
     return 0;
 }
