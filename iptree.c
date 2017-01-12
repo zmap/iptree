@@ -40,19 +40,29 @@ uint32_t findCommonMask (uint32_t ip1, uint32_t ip2){
     return mask;
 }
 
-void parseCIDR(const char* cidr, uint32_t * ipAddr, uint32_t * mask) {
+int iptree_parse_cidr(const char* cidr, uint32_t* ipAddr, uint32_t* mask) {
     int ipbytes[4];
     char *slash = strchr(cidr, '/');
     if (slash) {
-        sscanf(cidr, "%d.%d.%d.%d/%d", &ipbytes[3], &ipbytes[2], &ipbytes[1], 
-               &ipbytes[0], mask);
+        int count = sscanf(cidr, "%d.%d.%d.%d/%d", &ipbytes[3], &ipbytes[2],
+			&ipbytes[1], &ipbytes[0], mask);
+	if (count != 5) {
+		return EXIT_FAILURE;
+	}
     } else {
-        sscanf(cidr, "%d.%d.%d.%d", &ipbytes[3], &ipbytes[2], &ipbytes[1], 
-               &ipbytes[0]);
+        int count = sscanf(cidr, "%d.%d.%d.%d", &ipbytes[3], &ipbytes[2],
+			&ipbytes[1], &ipbytes[0]);
+	if (count != 4) {
+		return EXIT_FAILURE;
+	}
         *mask = 0;
+    }
+    if (*mask > 32) {
+		return EXIT_FAILURE;
     }
     *mask = masks[*mask];
     *ipAddr = ipbytes[0] | ipbytes[1] << 8 | ipbytes[2] << 16 | ipbytes[3] << 24;
+    return EXIT_SUCCESS;
 }
 
 iptree_node_t *insert_helper (iptree_node_t *root, uint32_t ip, uint32_t mask, 
@@ -130,7 +140,7 @@ iptree_node_t *iptree_insert (iptree_node_t *root, uint32_t ip, uint32_t mask,
 void iptree_insert_str (iptree_node_t *root, const char * cidr, char *data) {
     uint32_t ipAddr;
     uint32_t mask;
-    parseCIDR(cidr, &ipAddr, &mask);
+    iptree_parse_cidr(cidr, &ipAddr, &mask);
     iptree_insert(root, ipAddr, mask, data);
 }
 
@@ -199,7 +209,7 @@ iptree_node_t *iptree_lookup_best (iptree_node_t *root, uint32_t ip) {
 char * iptree_lookup_best_str (iptree_node_t *root, const char * ip) {
     uint32_t ipAddr;
     uint32_t mask;
-    parseCIDR(ip, &ipAddr, &mask);
+    iptree_parse_cidr(ip, &ipAddr, &mask);
     iptree_node_t * ret = iptree_lookup_best(root, ipAddr);
     return ((ret == NULL) ? ret : ret->data);
 }
@@ -211,7 +221,7 @@ void iptree_remove (iptree_node_t *root, uint32_t ip, uint32_t mask) {
 void iptree_remove_str (iptree_node_t *root, const char * cidr) {
     uint32_t ipAddr;
     uint32_t mask;
-    parseCIDR(cidr, &ipAddr, &mask);
+    iptree_parse_cidr(cidr, &ipAddr, &mask);
     iptree_remove(root, ipAddr, mask);
 }
 

@@ -32,6 +32,8 @@ typedef struct _iptree_node_t {
    char *data;			/* pointer to data */
 } iptree_node_t;
 
+int iptree_parse_cidr(const char* cidr, uint32_t* ipAddr, uint32_t* mask);
+
 iptree_node_t *iptree_create ();
 iptree_node_t *iptree_lookup_exact (iptree_node_t *root, uint32_t ip,
                                     uint32_t mask);
@@ -43,6 +45,7 @@ void iptree_insert_str (iptree_node_t *root, const char * cidr, char *data);
 void iptree_remove (iptree_node_t *root, uint32_t ip, uint32_t mask);
 void iptree_remove_str (iptree_node_t *root, const char * cidr);
 void iptree_destroy (iptree_node_t *root);
+
 #ifdef __cplusplus
 }
 #endif

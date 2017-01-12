@@ -255,5 +255,22 @@ TEST(WrapperTest, WrapperTest) {
     iptree_insert_str(root, "247.255.255.255/32", "fifth child");
     EXPECT_STREQ(iptree_lookup_best_str(root, "247.255.255.255"), "fifth child");
     iptree_destroy(root);
+}
 
+TEST(IPTreeTest, ParseCidr) {
+    uint32_t ip, mask;
+    EXPECT_EQ(EXIT_SUCCESS, iptree_parse_cidr("1.2.3.4/32", &ip, &mask));
+    EXPECT_EQ(0x01020304, ip);
+    EXPECT_EQ(mask, 0xFFFFFFFF);
+
+    EXPECT_EQ(EXIT_SUCCESS, iptree_parse_cidr("228.32.127.4/17", &ip, &mask));
+    EXPECT_EQ(0xE4207F04, ip);
+    EXPECT_EQ(mask, 0xFFFF8000);
+
+    EXPECT_EQ(EXIT_FAILURE, iptree_parse_cidr("1.2.3.4/33", &ip, &mask));
+    EXPECT_EQ(EXIT_FAILURE, iptree_parse_cidr("1.2.3.4/-2", &ip, &mask));
+
+    EXPECT_EQ(EXIT_SUCCESS, iptree_parse_cidr("13.1.99.1/1", &ip, &mask));
+    EXPECT_EQ(0x0D016301, ip);
+    EXPECT_EQ(mask, 0x80000000);
 }
