@@ -1,0 +1,16 @@
+language: c
+os: linux
+sudo: required
+dist: trusty
+before_install:
+- sudo apt-get update -qq
+- sudo apt-get install -qq build-essential
+script:
+- make
+- "./test_gtest"
+compiler: clang
+notifications:
+  email:
+  - zmap-devel@umich.edu
+  slack:
+    secure: d/cFgYYNuVisTw+OijKf5tDe9RNsHS2lkgYmGXXOppMuMu1Hq966VCP04mLbdlYeeR1cpxgCzK7dpChommw9H7/KOI0EpdfJ4KHJ1nnimzW3TRQWNNbchkat5YezeSJH2J4nuXlbrRIk/oKEruimu8Bo0bYdH+NXbQSBLdYJL4y+1KlU6KgUI8KE6XZi19TTbpy538WsbZJ/8RgsbRztOsXsLhHA0EdspxuSAC1114kcbFDLQsThIRTg7dmCt0uQsbkiw8vkvpnSSoQzU+1vyTVlkTT6DJe6WRXPn689NJSQ+oIwrEJ8yunFSOYhaSypX2eHVkMmWIwkzetBKLpzWC24O59t8vnH8YaFjKFEEeHDIx+WcmHVERnA1epCERb4PJC2B83FuiikjZ8jt5MSvdZm81ypR3ozw7liiMEi5C35h0mRofI5Qfrw325KvC+bKOgZiHoceni7+OY3qJu6GpUFAaxvZcx/t0H9lWisTsmBOEidWnGX4STGa4uFNlne3IxHgRA7Yd5RXN38qIrY3xVMhlL2X0wMQFiXxfhnEPbMYdjwJjpwnCNKFiSbD+swkcqBGxRvkL8onFSa2ekebFQVZtgeiC8svJ2bHyl5ZnvdYyZmk6L+gLrz7VXlc+bTnKfZ5VNZhWRK6oovROzeib9sSeOitVKtyqG8t+3rkQ0=
