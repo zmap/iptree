@@ -1,6 +1,6 @@
 CC := gcc
 CXX := g++
-CFLAGS := -std=c99 -Wall -Wextra
+CFLAGS := -std=c99 -Wall -Wextra -fPIC
 CXXFLAGS := -std=c++11 -Wall -Wextra
 # wasn't working for me LDFLAGS := ""
 OBJS = iptree.o
